@@ -12,6 +12,8 @@ namespace EmailCheck.Models
     {
         public int Id { get; set; }
         public string To { get; set; }
+        public string Bcc { get; set; }
+        public string CC { get; set; }
         public string Subject { get; set; }
         public string body { get; set; }
 
@@ -21,6 +23,24 @@ namespace EmailCheck.Models
             mail.Subject = Subject;
             mail.Body = body;
             mail.IsBodyHtml = false;
+
+            if (CC != null)
+            {
+                string[] ccId = CC.Split(',');
+                foreach (var ccEmail in ccId)
+                {
+                    mail.CC.Add(new MailAddress(ccEmail));
+                }
+            }
+
+            if (Bcc != null)
+            {
+                string[] bccEmail = Bcc.Split(',');
+                foreach (var item in bccEmail)
+                {
+                    mail.Bcc.Add(new MailAddress(item));
+                }
+            }
 
             SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);            
             smtp.EnableSsl = true;
